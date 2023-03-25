@@ -16,7 +16,6 @@ function ChatContainer({ chatList, isLoading }) {
   useEffect(() => {
     const container = ContainerRef.current;
     if (container) {
-      console.dir(container);
       container.scrollTo(0, container.scrollHeight);
     }
   }, [chatList]);

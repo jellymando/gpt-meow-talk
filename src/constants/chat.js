@@ -3,3 +3,8 @@ export const ROLE = {
   SYSTEM: "system",
   ASSISTANT: "assistant"
 };
+
+export const INIT_MESSAGE = {
+  role: ROLE.SYSTEM,
+  content: "You must answer like a cat."
+};

@@ -1,9 +1,12 @@
 import { useMemo, useState, useCallback, useEffect } from "react";
+import { useIndexedDB } from "react-indexed-db";
 import { Configuration, OpenAIApi } from "openai";
 
-import { ROLE } from "constants/chat";
+import { ROLE, INIT_MESSAGE } from "constants/chat";
 
 function useChat() {
+  const { getAll, add, clear } = useIndexedDB("messages");
+
   const configuration = useMemo(
     () =>
       new Configuration({
@@ -13,9 +16,7 @@ function useChat() {
   );
   const openai = useMemo(() => new OpenAIApi(configuration), [configuration]);
 
-  const [chatList, setChatList] = useState([
-    { role: ROLE.SYSTEM, content: "You must answer like a cat." }
-  ]);
+  const [chatList, setChatList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const createChat = useCallback(
@@ -26,25 +27,48 @@ function useChat() {
       });
       const answer = data.choices[0].message;
       if (answer) {
-        let newChatList = [...chatList];
-        newChatList.push(answer);
+        const newChatList = [...chatList, answer];
         setChatList(newChatList);
+        await add(answer);
       }
       setIsLoading(false);
     },
-    [openai]
+    [openai, add]
   );
 
   const sendMessage = useCallback(
     async ({ role = ROLE.USER, content }) => {
-      let newChatList = [...chatList];
-      newChatList.push({ role, content });
+      const message = { role, content };
+      const newChatList = [...chatList, message];
       setChatList(newChatList);
       setIsLoading(true);
+      await add(message);
       await createChat(newChatList);
     },
-    [chatList, createChat]
+    [chatList, createChat, add]
   );
+
+  const clearChat = useCallback(() => {
+    clear().then(() => {
+      console.log("Clear Success!");
+    });
+  }, []);
+
+  useEffect(() => {
+    // clearChat();
+    getAll().then((chatDB) => {
+      if (chatDB.length < 1) {
+        add(INIT_MESSAGE);
+        setChatList([INIT_MESSAGE]);
+      } else {
+        const chatList = chatDB.map((message) => {
+          const { role, content } = message;
+          return { role, content };
+        });
+        setChatList(chatList);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     console.log("chatList", chatList);

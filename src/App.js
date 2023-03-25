@@ -1,5 +1,7 @@
+import { initDB } from "react-indexed-db";
 import styled from "styled-components";
 
+import { DBConfig } from "config/DBConfig";
 import useChat from "hooks/useChat";
 import ChatContainer from "components/ChatContainer";
 import ChatInput from "components/ChatInput";
@@ -11,6 +13,8 @@ const Container = styled.div`
   height: 100%;
   background: #faf4d3;
 `;
+
+initDB(DBConfig);
 
 function App() {
   const { chatList, isLoading, sendMessage } = useChat();
