@@ -16,6 +16,7 @@ function useChat() {
   const [chatList, setChatList] = useState([
     { role: ROLE.SYSTEM, content: "You must answer like a cat." }
   ]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const createChat = useCallback(
     async (chatList) => {
@@ -29,6 +30,7 @@ function useChat() {
         newChatList.push(answer);
         setChatList(newChatList);
       }
+      setIsLoading(false);
     },
     [openai]
   );
@@ -38,6 +40,7 @@ function useChat() {
       let newChatList = [...chatList];
       newChatList.push({ role, content });
       setChatList(newChatList);
+      setIsLoading(true);
       await createChat(newChatList);
     },
     [chatList, createChat]
@@ -47,7 +50,7 @@ function useChat() {
     console.log("chatList", chatList);
   }, [chatList]);
 
-  return { chatList, sendMessage };
+  return { chatList, isLoading, sendMessage };
 }
 
 export default useChat;

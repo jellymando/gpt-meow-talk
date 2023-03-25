@@ -10,15 +10,14 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   background: #faf4d3;
-  padding: 20px;
 `;
 
 function App() {
-  const { chatList, sendMessage } = useChat();
+  const { chatList, isLoading, sendMessage } = useChat();
 
   return (
     <Container>
-      <ChatContainer chatList={chatList} />
+      <ChatContainer chatList={chatList} isLoading={isLoading} />
       <ChatInput sendMessage={sendMessage} />
     </Container>
   );

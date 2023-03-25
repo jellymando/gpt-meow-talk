@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
-  margin-top: 20px;
+  padding: 20px;
 `;
 
 const Input = styled.input`
@@ -14,14 +14,18 @@ const Input = styled.input`
   border: 2px solid #f3e16b;
   border-radius: 5px;
   padding: 0 15px;
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 const SendButton = styled.button`
   flex: 1 0 65px;
   height: 40px;
-  color: #f3e16b;
   font-size: 16px;
   font-weight: bold;
+  color: #a6915c;
   background: #fff;
   border: 2px solid #f3e16b;
   border-radius: 5px;
