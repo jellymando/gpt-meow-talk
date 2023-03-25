@@ -24,7 +24,6 @@ function useChat() {
         messages: chatList
       });
       const answer = data.choices[0].message;
-      console.log("answer", answer);
       if (answer) {
         let newChatList = [...chatList];
         newChatList.push(answer);
@@ -35,11 +34,11 @@ function useChat() {
   );
 
   const sendMessage = useCallback(
-    ({ role = ROLE.USER, content }) => {
+    async ({ role = ROLE.USER, content }) => {
       let newChatList = [...chatList];
       newChatList.push({ role, content });
       setChatList(newChatList);
-      createChat(newChatList);
+      await createChat(newChatList);
     },
     [chatList, createChat]
   );
