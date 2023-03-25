@@ -1,0 +1,8 @@
+{
+  "target": "es5",
+  "module": "commonjs",
+  "compilerOptions": {
+    "baseUrl": "src"
+  },
+  "includes": ["src"]
+}
