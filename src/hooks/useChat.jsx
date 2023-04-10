@@ -17,19 +17,24 @@ function useChat() {
   const openai = useMemo(() => new OpenAIApi(configuration), [configuration]);
 
   const [chatList, setChatList] = useState([]);
+  const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const createChat = useCallback(
     async (chatList) => {
-      const { data } = await openai.createChatCompletion({
-        model: "gpt-3.5-turbo",
-        messages: chatList
-      });
-      const answer = data.choices[0].message;
-      if (answer) {
-        const newChatList = [...chatList, answer];
-        setChatList(newChatList);
-        await add(answer);
+      try {
+        const { data } = await openai.createChatCompletion({
+          model: "gpt-3.5-turbo",
+          messages: chatList
+        });
+        const answer = data.choices[0].message;
+        if (answer) {
+          const newChatList = [...chatList, answer];
+          setChatList(newChatList);
+          await add(answer);
+        }
+      } catch (e) {
+        setIsError(true);
       }
       setIsLoading(false);
     },
@@ -74,7 +79,7 @@ function useChat() {
     console.log("chatList", chatList);
   }, [chatList]);
 
-  return { chatList, isLoading, sendMessage };
+  return { chatList, isError, isLoading, sendMessage };
 }
 
 export default useChat;

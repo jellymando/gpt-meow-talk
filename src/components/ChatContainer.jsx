@@ -10,7 +10,7 @@ const Container = styled.div`
   overflow-y: auto;
 `;
 
-function ChatContainer({ chatList, isLoading }) {
+function ChatContainer({ chatList, isError, isLoading }) {
   const ContainerRef = useRef(null);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ function ChatContainer({ chatList, isLoading }) {
       {chatList.map((message, idx) => (
         <ChatMessage key={idx} message={message} />
       ))}
-      {isLoading && <ChatMessage isLoading={true} />}
+      <ChatMessage isError={isError} isLoading={isLoading} />
     </Container>
   );
 }

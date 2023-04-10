@@ -17,11 +17,15 @@ const Container = styled.div`
 initDB(DBConfig);
 
 function App() {
-  const { chatList, isLoading, sendMessage } = useChat();
+  const { chatList, isError, isLoading, sendMessage } = useChat();
 
   return (
     <Container>
-      <ChatContainer chatList={chatList} isLoading={isLoading} />
+      <ChatContainer
+        chatList={chatList}
+        isError={isError}
+        isLoading={isLoading}
+      />
       <ChatInput sendMessage={sendMessage} />
     </Container>
   );
